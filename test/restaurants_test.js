@@ -29,10 +29,34 @@ describe("Restaurants class", function () {
       getRestaurantsOpenAt({ weekday: 0, hour: 8, minute: 30 })
     ).to.deep.equal(["Kayasa Restaurant"]);
   });
+
   it("reports only The Golden Duck and Tandoori Mahal open on Sunday at 9:30 pm", () => {
     expect(
       getRestaurantsOpenAt({ weekday: 6, hour: 21, minute: 30 })
     ).to.deep.equal(["The Golden Duck","Tandoori Mahal"]);
   });
-  // TODO
+
+  it("should return integer values for opening days passed as an array", () => {
+    expect(
+      restaurants.getDaysOpen('Mon', 'Thu')
+    ).to.deep.equal([0,1,2,3]);
+    expect(
+      restaurants.getDaysOpen('tue', 'sun')
+    ).to.deep.equal([1, 2, 3, 4, 5, 6]);
+  });
+
+  it("should get day as number", () => {
+    expect(
+      restaurants.getDayAsNumber('Fri')
+    ).to.deep.equal(4);
+    expect(
+      restaurants.getDayAsNumber('tue')
+    ).to.deep.equal(1);
+  });
+  
+  it("should get time as 24 hr format", () => {
+    expect(
+      restaurants.convertTime12to24('2:00 pm')
+    ).to.deep.equal({ hours: 14, minutes: 0});
+  });
 });

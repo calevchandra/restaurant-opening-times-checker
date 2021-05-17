@@ -2,58 +2,23 @@
 
 ## Specification
 
-Your task is to read a JSON file that contains data describing the opening
-times of a number of restaurants, and then provide a method for querying
+Reading a JSON file that contains data describing the opening
+times of a number of restaurants, which then provides a method for querying
 which of the restaurants are open at a specified date and time.
 
-A simple code and test skeleton written in JavaScript/Mocha is provided to help
-get you started, but you may write your solution in any language.
+## To run the application 
+First do `npm i` to install the packages and to run sample code do `node app/index.js`
+This will run index.js. You may change the dates everytime you want to test different aspects/opening times and run `node app/index.js` again. Running tests would be more sufficient. See below
 
-## Test Data
+## Testing Data
+You can run `npm test` in terminal to test the code
 
-Test data can be found in the `restaurant_data.json` file. Inspect this file
-to determine the kind of input data that your code should be able to handle.
+## Summary 
+The app uses a basic architecture by using one class - Restaurants from where all methods are accessed. I have read and formatted the data in the simplest possible form to query. This helps in finding issues early rather than leaving formatting to the last minute. Moreover, I have used helper functions to not reinvent the wheel and also just separating logic into different functions. This would help in testing and refactoring should someone new jump in to change the code. 
 
-All the data in `restaurant_data.json` are correct and valid. You may add
-additional entries for testing purposes, but please do not alter the existing
-content.
+Important methods have been given descriptions to provide and overview of the function and it's purpose. 
 
-## Additional Information
+An improvement that could be done later on is using typescript to ensure that data is in a specific format rather than having to parse to integer etc in functions. 
 
-- All dates and times can be assumed to be in the same time zone
-- The input file can be assumed to be well-formed and contain no invalid data
-- Remember to write tests for your solution, particularly for any edge cases
-  that could occur in the input data
 
-## Deliverable
 
-The deliverable is the source code and files required to build and run your
-solution. Either a public git repository, e.g. GitHub, GitLab or BitBucket, or
-a zip archive.
-
-Please also provide a README that contains the following:
-
-- Any instructions needed to boot and test your solution
-- A technical overview of the implementation, including:
-  - A summary of its architecture.
-  - Technical justification of key design decisions with comparison to other
-    possible approaches.
-  - Implementation notes that would help orient a coder new to the code
-  - Any areas of the design or implementation that could be improved further or
-    that you would like specific feedback on.
-
-## Tips
-
-- A simple and straightforward design is preferred. Avoid unnecessary
-  complexity.
-- Using a strict code linter and automatic formatter is recommended
-- Remove debug or other unnecessary code before submitting
-- Don't forget the tests.
-
-## Questions
-
-If you have any questions about the assignment please be in touch with a member
-of the HeartLab team and we’ll do our best to help in whatever way we
-can.
-
-Good luck!

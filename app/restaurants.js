@@ -13,35 +13,43 @@ const luxon = require("luxon");
 class Restaurants {
   constructor(jsonFilename) {
     const jsonData = JSON.parse(fs.readFileSync(jsonFilename));
+    this.formatRestaurantData(jsonData.restaurants);
+  }
+
+  /**
+   * Formats the restaurants data from the JSON file
+   * @param {*} rests read from file data
+   */
+  formatRestaurantData(rests){
     this.restaurants = [];
     let daysAsNumberFormat = [];
-
-    for (var value of jsonData.restaurants) {
-      const arrOpeningHours = value.opening_hours.split(";")
+    for (const rest of rests) {
+      const arrOpeningHours = rest.opening_hours.split(";")
 
       daysAsNumberFormat = [];
-      for (var val of arrOpeningHours){
+      for (let val of arrOpeningHours) {
         val = val.trim();
         let firstDay = val.substring(0, 3);
 
         let timesOpen;
         let arrTimesOpen;
 
-        if (val.charAt(3) === "-"){
+        if (val.charAt(3) === "-") {
           let lastDay = val.substring(4, 7);
           timesOpen = val.substring(7, val.length);
           arrTimesOpen = this.splitStringIntoArrayAndTrim(timesOpen);
-          daysAsNumberFormat.push({ weekdays: this.getDays(firstDay, lastDay), times: arrTimesOpen });
-          
-        } else{
+          daysAsNumberFormat.push({ weekdays: this.getDaysOpen(firstDay, lastDay), times: arrTimesOpen });
+
+        } else {
           timesOpen = val.substring(4, val.length);
           arrTimesOpen = this.splitStringIntoArrayAndTrim(timesOpen);
-          daysAsNumberFormat.push({ weekdays: this.getDays(firstDay, null), times: arrTimesOpen});
+          daysAsNumberFormat.push({ weekdays: this.getDaysOpen(firstDay, null), times: arrTimesOpen });
         }
       }
-      this.restaurants.push({ name: value.name, opening_hours: value.opening_hours, opening_times:  daysAsNumberFormat });
+      this.restaurants.push({ name: rest.name, opening_times: daysAsNumberFormat });
     }
   }
+  
   splitStringIntoArrayAndTrim (strValue){
     let arrayVal = strValue.split("-");
     arrayVal[0] = arrayVal[0].trim();
@@ -49,23 +57,30 @@ class Restaurants {
     return arrayVal;
   }
 
+  /**
+   * Helper function to convert time (1:30pm) to 24 hours (13:30)
+   * @param {*} time12h 
+   * @returns 24 hours
+   */
   convertTime12to24(time12h){
-    const [time, modifier] = time12h.split(' ');
-
+    const [time, modifier] = time12h.split(' ')
     let [hours, minutes] = time.split(':');
-
     if (hours === '12') {
       hours = '00';
     }
-
     if (modifier.toLowerCase() === 'pm') {
       hours = parseInt(hours, 10) + 12;
     }
-
      return { hours: parseInt(hours), minutes: isNaN(minutes) ? 0 : parseInt(minutes)};
   }
 
-  getDays(firstDay, lastDay){
+  /**
+   * Gets days as number format that restaurant is open.
+   * @param {*} firstDay 
+   * @param {*} lastDay 
+   * @returns days which the restaurants are open number format. For example, [0,1,2] represents Monday, Tuesday & Wednesday
+   */
+  getDaysOpen(firstDay, lastDay){
     let daysOpen = [];
     const firstDayAsNum = this.getDayAsNumber(firstDay);
     if (lastDay) {
@@ -79,6 +94,11 @@ class Restaurants {
     return daysOpen;
   }
 
+  /**
+   * 
+   * @param {*} day 
+   * @returns day as in number form 0 - Monday , 1 - Tuesday and so on
+   */
   getDayAsNumber(day){
     let dayAsNumber;
     switch (day.toLowerCase()) {
@@ -105,8 +125,6 @@ class Restaurants {
     }
     return dayAsNumber;
   }
-
-  
 
   /**
    * Finds the restaurants open at the specified time.
